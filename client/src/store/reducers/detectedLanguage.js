@@ -20,7 +20,7 @@ const reducer = (
       return {
         ...state,
         data: action.payload,
-        loading: true,
+        loading: false,
       }
     case DETECT_LANGUAGE_ERROR:
       return {

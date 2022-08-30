@@ -24,7 +24,7 @@ const LanguageAutocomplete = ({
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Asynchronous"
+          label="Language"
           InputProps={{
             ...params.InputProps,
             endAdornment: (
