@@ -3,6 +3,8 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
 import { makeStyles, createStyles } from "@mui/styles";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
 
 import { fetchTranslation } from "../api/translation.api";
 import { fetchDetectedLanguage, fetchLanguages } from "../api/language.api";
@@ -12,9 +14,12 @@ import Header from "../components/Header/Header";
 import Container from "../components/Container/Container";
 import { useDispatch, useSelector } from "react-redux";
 import LanguageAutocomplete from "../components/Autocomplete/LanguageAutocomplete";
-import { Skeleton } from "@mui/material";
+import { Checkbox, Skeleton } from "@mui/material";
 import translateText from "../store/actions/translationActions/translateText";
 import detectLanguage from "../store/actions/languageActions/detectLanguages";
+import addTranslationToFavorites from "../store/actions/favoritesActions/addTranslationToFavorites";
+import removeTranslationFromFavorites from "../store/actions/favoritesActions/removeTranslationFromFavorites";
+import isFavoriteTranslationExists from "../utils/isFavoriteTranslationExists";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -41,27 +46,55 @@ const Translator = () => {
   const dispatch = useDispatch();
   const languages = useSelector((state) => state.languages);
   const detectedLanguage = useSelector((state) => state.detectedLanguage);
-  console.log("detectedLanguage: ", detectedLanguage);
   const translation = useSelector((state) => state.translation);
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
+  const translationData = {
+    from: {
+      language: inputLanguage,
+      text: value,
+    },
+    to: {
+      language: outputLanguage,
+      text: translation?.data?.text[0].translations[0].text,
+    },
+  };
+
+  const [favoriteChecked, setFavoriteChecked] = useState(
+    isFavoriteTranslationExists(translationData)
+  );
+
+  const onFavoritesButtonChange = (event) => {
+    if (event.target.checked && value) {
+      dispatch(addTranslationToFavorites(translationData));
+    } else if (!event.target.checked) {
+      dispatch(removeTranslationFromFavorites(translationData));
+    }
+    setFavoriteChecked(isFavoriteTranslationExists(translationData));
+  };
+
   const debounsedTranslate = useDebounce(value, 500);
 
   useLayoutEffect(() => {
     if (inputLanguage.value === "detect") {
-      dispatch(detectLanguage(value)); //detectedLanguage.data.language[0].language
+      dispatch(detectLanguage(value));
 
       const inputLng = detectedLanguage?.data?.language[0].language;
 
       dispatch(translateText(value, inputLng, outputLanguage.value));
-      console.log("value, in", value, inputLng, outputLanguage.value);
     } else {
       dispatch(translateText(value, inputLanguage.value, outputLanguage.value));
     }
-  }, [debounsedTranslate, detectedLanguage?.data?.language[0].language]);
+
+    setFavoriteChecked(isFavoriteTranslationExists(translationData));
+  }, [
+    debounsedTranslate,
+    detectedLanguage?.data?.language[0].language,
+    translation?.data?.text[0].translations[0].text,
+  ]);
 
   useEffect(() => {
     dispatch(getLanguages());
@@ -118,6 +151,13 @@ const Translator = () => {
                 value={translation.data?.text[0].translations[0].text || ""}
               />
             )}
+
+            <Checkbox
+              checked={favoriteChecked}
+              onChange={onFavoritesButtonChange}
+              icon={<StarBorderIcon />}
+              checkedIcon={<StarIcon />}
+            />
           </Grid>
         </Grid>
       </Container>
