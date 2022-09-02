@@ -1,9 +1,9 @@
 import { ADD_TRANSLATION_TO_FAVORITES } from "../../actionTypes";
 
-const addTranslationToFavorites = (transaltion) => ({
+const addTranslationToFavorites = (translation) => ({
   type: ADD_TRANSLATION_TO_FAVORITES,
   payload: {
-    transaltion,
+    translation,
   }
 });
 

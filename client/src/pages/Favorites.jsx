@@ -21,10 +21,9 @@ const Favorites = () => {
       <Header />
       <Container>
         <Grid container spacing={4}>
-          {favorites?.favoritesTranslations.map((tr) => (
-            <Grid item xs={12}>
+          {favorites?.favoritesTranslations.map((tr, index) => (
+            <Grid key={index} item xs={12}>
               {tr.transaltion.from.text} {tr.transaltion.to.text}
-              {/* {JSON.stringify(tr)} */}
               <button onClick={onDeleteButtonClick(tr)}>Удалить</button>
             </Grid>
           ))}

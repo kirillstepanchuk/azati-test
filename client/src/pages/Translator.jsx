@@ -1,31 +1,26 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
 import Grid from "@mui/material/Grid";
 import { makeStyles, createStyles } from "@mui/styles";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
+import { Checkbox, Skeleton } from "@mui/material";
 
-import { fetchTranslation } from "../api/translation.api";
-import { fetchDetectedLanguage, fetchLanguages } from "../api/language.api";
-import getLanguages from "../store/actions/languageActions/getLanguages";
 import useDebounce from "../hooks/useDebounce";
 import Header from "../components/Header/Header";
 import Container from "../components/Container/Container";
-import { useDispatch, useSelector } from "react-redux";
 import LanguageAutocomplete from "../components/Autocomplete/LanguageAutocomplete";
-import { Checkbox, Skeleton } from "@mui/material";
-import translateText from "../store/actions/translationActions/translateText";
+import getLanguages from "../store/actions/languageActions/getLanguages";
 import detectLanguage from "../store/actions/languageActions/detectLanguages";
+import translateText from "../store/actions/translationActions/translateText";
 import addTranslationToFavorites from "../store/actions/favoritesActions/addTranslationToFavorites";
 import removeTranslationFromFavorites from "../store/actions/favoritesActions/removeTranslationFromFavorites";
 import isFavoriteTranslationExists from "../utils/isFavoriteTranslationExists";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    textarea: {
-      marginTop: theme.spacing(4),
-    },
+    mainGrid: {},
   })
 );
 
@@ -113,51 +108,77 @@ const Translator = () => {
     <div>
       <Header />
       <Container>
-        <Grid container spacing={4}>
-          <Grid item xs={6}>
-            <LanguageAutocomplete
-              languages={languagesWidthDetect}
-              currentLanguage={inputLanguage.label}
-              setLanguage={setInputLanguage}
-              loading={languages.loading}
-            />
+        <Grid
+          container
+          direction={{ xs: "column", md: "row" }}
+          columns={16}
+          className={classes.mainGrid}
+        >
+          <Grid item xs={7}>
+            <Grid container spacing={{ xs: 2, md: 3 }} direction="column">
+              <Grid item>
+                <LanguageAutocomplete
+                  languages={languagesWidthDetect}
+                  currentLanguage={inputLanguage.label}
+                  setLanguage={setInputLanguage}
+                  loading={languages.loading}
+                />
+              </Grid>
 
-            <TextField
-              className={classes.textarea}
-              fullWidth
-              multiline
-              minRows={4}
-              value={value}
-              onChange={handleChange}
-            />
+              <Grid item>
+                <TextField
+                  className={classes.textarea}
+                  fullWidth
+                  multiline
+                  minRows={4}
+                  value={value}
+                  onChange={handleChange}
+                />
+              </Grid>
+            </Grid>
           </Grid>
 
-          <Grid item xs={6}>
-            <LanguageAutocomplete
-              languages={possibleLanguages}
-              currentLanguage={outputLanguage.label}
-              setLanguage={setOutputLanguage}
-              loading={languages.loading}
-            />
-
-            {translation.loading || detectedLanguage.loading ? (
-              <Skeleton width="100%" height={200} />
-            ) : (
-              <TextField
-                className={classes.textarea}
-                fullWidth
-                multiline
-                minRows={4}
-                value={translation.data?.text[0].translations[0].text || ""}
+          <Grid item xs={2}>
+            <Grid
+              container
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Checkbox
+                checked={favoriteChecked}
+                onChange={onFavoritesButtonChange}
+                icon={<StarBorderIcon />}
+                checkedIcon={<StarIcon />}
               />
-            )}
+            </Grid>
+          </Grid>
 
-            <Checkbox
-              checked={favoriteChecked}
-              onChange={onFavoritesButtonChange}
-              icon={<StarBorderIcon />}
-              checkedIcon={<StarIcon />}
-            />
+          <Grid item xs={7}>
+            <Grid container spacing={{ xs: 2, md: 3 }} direction="column">
+              <Grid item>
+                <LanguageAutocomplete
+                  languages={possibleLanguages}
+                  currentLanguage={outputLanguage.label}
+                  setLanguage={setOutputLanguage}
+                  loading={languages.loading}
+                />
+              </Grid>
+
+              <Grid item>
+                {translation.loading || detectedLanguage.loading ? (
+                  <Skeleton width="100%" />
+                ) : (
+                  <TextField
+                    className={classes.textarea}
+                    fullWidth
+                    multiline
+                    minRows={4}
+                    value={translation.data?.text[0].translations[0].text || ""}
+                  />
+                )}
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Container>

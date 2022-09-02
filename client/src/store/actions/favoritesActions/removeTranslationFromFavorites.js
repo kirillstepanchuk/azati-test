@@ -1,9 +1,9 @@
 import { REMOVE_TRANSLATION_FROM_FAVORITES } from "../../actionTypes";
 
-const removeTranslationFromFavorites = (transaltion) => ({
+const removeTranslationFromFavorites = (translation) => ({
   type: REMOVE_TRANSLATION_FROM_FAVORITES,
   payload: {
-    transaltion,
+    translation,
   }
 });
 
