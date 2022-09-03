@@ -5,7 +5,6 @@ import { createStyles, makeStyles } from "@mui/styles";
 const useStyles = makeStyles((theme) =>
   createStyles({
     container: {
-      marginTop: theme.spacing(12),
       paddingLeft: theme.spacing(14),
       paddingRight: theme.spacing(14),
       [theme.breakpoints.down("sm")]: {

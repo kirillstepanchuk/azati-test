@@ -24,6 +24,14 @@ const CustomThemeProvider = ({ children }) => {
       createTheme({
         palette: {
           mode,
+          headerLink: {
+            main: "#fff",
+            contrastText: "#fff",
+          },
+          headerMenuLink:
+            mode === "light"
+              ? { main: "#000", contrastText: "#000" }
+              : { main: "#fff", contrastText: "#fff" },
         },
         spacing: 5,
         typography: {

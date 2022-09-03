@@ -20,7 +20,9 @@ import isFavoriteTranslationExists from "../utils/isFavoriteTranslationExists";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    mainGrid: {},
+    mainGrid: {
+      marginTop: theme.spacing(12),
+    },
   })
 );
 

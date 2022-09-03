@@ -11,7 +11,7 @@ const ThemeSwitch = () => {
   const colorMode = useContext(ColorModeContext);
 
   return (
-    <IconButton onClick={colorMode.toggleColorMode}>
+    <IconButton onClick={colorMode.toggleColorMode} color="headerLink">
       {theme.palette.mode === "dark" ? (
         <Brightness7Icon />
       ) : (
