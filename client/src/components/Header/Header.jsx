@@ -5,6 +5,7 @@ import TranslateIcon from "@mui/icons-material/Translate";
 import { Link } from "react-router-dom";
 
 import { ROUTE_PAGES } from "../../constants";
+import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -42,6 +43,7 @@ const Header = () => {
             <Typography className={classes.linkText}>Favorites</Typography>
           </Link>
         </Toolbar>
+        <ThemeSwitch />
       </AppBar>
     </Grid>
   );

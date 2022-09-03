@@ -58,7 +58,7 @@ const Favorites = () => {
                       <Typography>
                         {tr.translation.to.language.label}
                       </Typography>
-                      <IconButton onClick={onDeleteButtonClick(tr)}>
+                      <IconButton onClick={onDeleteButtonClick(tr.translation)}>
                         <DeleteIcon />
                       </IconButton>
                     </Grid>

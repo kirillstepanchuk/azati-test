@@ -25,7 +25,7 @@ const reducer = (
     case REMOVE_TRANSLATION_FROM_FAVORITES:
       state.favoritesTranslations.reverse();
 
-      const indexOfProduct = state.favoritesTranslations.findIndex((object) => JSON.stringify(object) === JSON.stringify(action.payload.translation));
+      const indexOfProduct = state.favoritesTranslations.findIndex((object) => JSON.stringify(object) === JSON.stringify(action.payload));
 
       if (indexOfProduct === -1) {
         return state;
