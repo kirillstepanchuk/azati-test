@@ -1,29 +1,46 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { makeStyles, createStyles } from "@mui/styles";
 
 import Container from "../components/Container/Container";
 import Header from "../components/Header/Header";
 import removeTranslationFromFavorites from "../store/actions/favoritesActions/removeTranslationFromFavorites";
 
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    mainContainer: {
+      paddingTop: theme.spacing(12),
+    },
+  })
+);
+
 const Favorites = () => {
+  const classes = useStyles();
+  
   const dispatch = useDispatch();
   const { favoritesTranslations } = useSelector((state) => state.favorites);
 
-  const onDeleteButtonClick = (tr) => {
+  const onDeleteButtonClick = useCallback((tr) => {
     return () => {
       dispatch(removeTranslationFromFavorites(tr));
     };
-  };
+  }, []);
 
   return (
     <div>
       <Header />
       <Container>
-        <Grid container spacing={4} direction="column" justifyContent="center">
+        <Grid
+          className={classes.mainContainer}
+          container
+          spacing={4}
+          direction="column"
+          justifyContent="center"
+        >
           {favoritesTranslations.length ? (
             favoritesTranslations.map((tr, index) => (
               <Grid key={index} item xs={12}>

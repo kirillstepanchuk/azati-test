@@ -3,6 +3,16 @@ export const ROUTE_PAGES = {
   favorites: '/favorites',
 };
 
+export const DETECT_LANGUAGE = {
+  label: "Detect language",
+  value: "detect",
+}
+
+export const DEFAULT_OUTPUT_LANGUAGE = {
+  label: "English",
+  value: "en",
+}
+
 export const LANGUAGES = {
   "translation": {
     "af": {

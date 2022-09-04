@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -17,6 +17,8 @@ import translateText from "../store/actions/translationActions/translateText";
 import addTranslationToFavorites from "../store/actions/favoritesActions/addTranslationToFavorites";
 import removeTranslationFromFavorites from "../store/actions/favoritesActions/removeTranslationFromFavorites";
 import isFavoriteTranslationExists from "../utils/isFavoriteTranslationExists";
+import findLanguage from "../utils/findLanguage";
+import { DETECT_LANGUAGE, DEFAULT_OUTPUT_LANGUAGE } from "../constants";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -29,66 +31,78 @@ const useStyles = makeStyles((theme) =>
 const Translator = () => {
   const classes = useStyles();
 
-  const [value, setValue] = useState("");
-
-  const [inputLanguage, setInputLanguage] = useState({
-    label: "Detect language",
-    value: "detect",
-  });
-  const [outputLanguage, setOutputLanguage] = useState({
-    label: "English",
-    value: "en",
-  });
+  const [inputText, setInputText] = useState("");
+  const [inputLanguage, setInputLanguage] = useState(DETECT_LANGUAGE);
+  const [outputLanguage, setOutputLanguage] = useState(DEFAULT_OUTPUT_LANGUAGE);
 
   const dispatch = useDispatch();
   const languages = useSelector((state) => state.languages);
   const detectedLanguage = useSelector((state) => state.detectedLanguage);
   const translation = useSelector((state) => state.translation);
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+  const debounsedTranslate = useDebounce(inputText, 500);
 
-  const translationData = {
-    from: {
-      language: inputLanguage,
-      text: value,
-    },
-    to: {
-      language: outputLanguage,
-      text: translation?.data?.text[0].translations[0].text,
-    },
-  };
+  const onInputTextChange = useCallback((event) => {
+    setInputText(event.target.value);
+  }, []);
+
+  const translationData =
+    inputLanguage.value === "detect" &&
+    detectedLanguage?.data?.language[0].language
+      ? {
+          from: {
+            language: findLanguage(
+              detectedLanguage?.data?.language[0].language
+            ),
+            text: inputText,
+          },
+          to: {
+            language: outputLanguage,
+            text: translation?.data?.text[0].translations[0].text,
+          },
+        }
+      : {
+          from: {
+            language: inputLanguage,
+            text: inputText,
+          },
+          to: {
+            language: outputLanguage,
+            text: translation?.data?.text[0].translations[0].text,
+          },
+        };
 
   const [favoriteChecked, setFavoriteChecked] = useState(
     isFavoriteTranslationExists(translationData)
   );
 
-  const onFavoritesButtonChange = (event) => {
-    if (event.target.checked && value) {
+  const onFavoritesButtonChange = useCallback((event) => {
+    if (event.target.checked && inputText) {
       dispatch(addTranslationToFavorites(translationData));
     } else if (!event.target.checked) {
       dispatch(removeTranslationFromFavorites(translationData));
     }
     setFavoriteChecked(isFavoriteTranslationExists(translationData));
-  };
+  }, []);
 
-  const debounsedTranslate = useDebounce(value, 500);
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (inputLanguage.value === "detect") {
-      dispatch(detectLanguage(value));
+      dispatch(detectLanguage(inputText));
 
       const inputLng = detectedLanguage?.data?.language[0].language;
 
-      dispatch(translateText(value, inputLng, outputLanguage.value));
+      dispatch(translateText(inputText, inputLng, outputLanguage.value));
     } else {
-      dispatch(translateText(value, inputLanguage.value, outputLanguage.value));
+      dispatch(
+        translateText(inputText, inputLanguage.value, outputLanguage.value)
+      );
     }
 
     setFavoriteChecked(isFavoriteTranslationExists(translationData));
   }, [
     debounsedTranslate,
+    inputLanguage,
+    outputLanguage,
     detectedLanguage?.data?.language[0].language,
     translation?.data?.text[0].translations[0].text,
   ]);
@@ -98,13 +112,7 @@ const Translator = () => {
   }, []);
 
   const possibleLanguages = languages.data?.languages || [];
-  const languagesWidthDetect = [
-    {
-      label: "Detect language",
-      value: "detect",
-    },
-    ...possibleLanguages,
-  ];
+  const languagesWidthDetect = [DETECT_LANGUAGE, ...possibleLanguages];
 
   return (
     <div>
@@ -133,8 +141,8 @@ const Translator = () => {
                   fullWidth
                   multiline
                   minRows={4}
-                  value={value}
-                  onChange={handleChange}
+                  value={inputText}
+                  onChange={onInputTextChange}
                 />
               </Grid>
             </Grid>
@@ -148,6 +156,7 @@ const Translator = () => {
               justifyContent="center"
             >
               <Checkbox
+                disabled={detectedLanguage?.loading || translation?.loading}
                 checked={favoriteChecked}
                 onChange={onFavoritesButtonChange}
                 icon={<StarBorderIcon />}
@@ -169,7 +178,7 @@ const Translator = () => {
 
               <Grid item>
                 {translation.loading || detectedLanguage.loading ? (
-                  <Skeleton width="100%" />
+                  <Skeleton variant="rounded" width="100%" height={137} />
                 ) : (
                   <TextField
                     className={classes.textarea}

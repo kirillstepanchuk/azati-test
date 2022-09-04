@@ -71,6 +71,7 @@ const Header = () => {
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Button
                     component={RouterLink}
+                    size="small"
                     to={ROUTE_PAGES.main}
                     color="headerMenuLink"
                   >
@@ -81,6 +82,7 @@ const Header = () => {
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Button
                     component={RouterLink}
+                    size="small"
                     to={ROUTE_PAGES.favorites}
                     color="headerMenuLink"
                   >
@@ -93,6 +95,7 @@ const Header = () => {
             <Grid sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               <Button
                 component={RouterLink}
+                size="small"
                 to={ROUTE_PAGES.main}
                 className={classes.link}
                 color="headerLink"
@@ -102,6 +105,7 @@ const Header = () => {
 
               <Button
                 component={RouterLink}
+                size="small"
                 to={ROUTE_PAGES.favorites}
                 className={classes.link}
                 color="headerLink"
