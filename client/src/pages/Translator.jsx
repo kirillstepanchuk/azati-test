@@ -5,7 +5,8 @@ import Grid from "@mui/material/Grid";
 import { makeStyles, createStyles } from "@mui/styles";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
-import { Checkbox, Skeleton } from "@mui/material";
+import SyncIcon from "@mui/icons-material/Sync";
+import { Checkbox, Skeleton, IconButton } from "@mui/material";
 
 import useDebounce from "../hooks/useDebounce";
 import Header from "../components/Header/Header";
@@ -46,31 +47,32 @@ const Translator = () => {
     setInputText(event.target.value);
   }, []);
 
-  const translationData =
-    inputLanguage.value === "detect" &&
-    detectedLanguage?.data?.language[0].language
-      ? {
-          from: {
-            language: findLanguage(
-              detectedLanguage?.data?.language[0].language
-            ),
-            text: inputText,
-          },
-          to: {
-            language: outputLanguage,
-            text: translation?.data?.text[0].translations[0].text,
-          },
-        }
-      : {
-          from: {
-            language: inputLanguage,
-            text: inputText,
-          },
-          to: {
-            language: outputLanguage,
-            text: translation?.data?.text[0].translations[0].text,
-          },
-        };
+  const onChangeLanguagesButtonClick = useCallback(() => {
+    const temptInputLanguage = Object.assign({}, inputLanguage);
+    const tempOutputLanguage = Object.assign({}, outputLanguage);
+
+    const tempOutputText = translation?.data?.text[0].translations[0].text;
+
+    setOutputLanguage(temptInputLanguage);
+    setInputLanguage(tempOutputLanguage);
+
+    setInputText(tempOutputText);
+  }, [inputLanguage, outputLanguage, translation]);
+
+  const translationData = {
+    from: {
+      language:
+        inputLanguage.value === "detect" &&
+        detectedLanguage?.data?.language[0].language
+          ? findLanguage(detectedLanguage?.data?.language[0].language)
+          : inputLanguage,
+      text: inputText,
+    },
+    to: {
+      language: outputLanguage,
+      text: translation?.data?.text[0].translations[0].text,
+    },
+  };
 
   const [favoriteChecked, setFavoriteChecked] = useState(
     isFavoriteTranslationExists(translationData)
@@ -156,12 +158,24 @@ const Translator = () => {
               justifyContent="center"
             >
               <Checkbox
-                disabled={detectedLanguage?.loading || translation?.loading}
+                disabled={
+                  detectedLanguage?.loading ||
+                  translation?.loading ||
+                  inputText === ""
+                }
                 checked={favoriteChecked}
                 onChange={onFavoritesButtonChange}
                 icon={<StarBorderIcon />}
                 checkedIcon={<StarIcon />}
               />
+
+              <IconButton
+                disabled={inputLanguage.value === DETECT_LANGUAGE.value}
+                color="headerLink"
+                onClick={onChangeLanguagesButtonClick}
+              >
+                <SyncIcon />
+              </IconButton>
             </Grid>
           </Grid>
 

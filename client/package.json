@@ -5,9 +5,12 @@
   "description": "translator",
   "license": "ISC",
   "main": "index.jsx",
+  "homepage": "https://kirillstepanchuk.github.io/azati-test/",
   "scripts": {
     "dev": "webpack-dev-server --config ./webpacks/webpack.dev.js --open --hot",
-    "build": "webpack  --config ./webpacks/webpack.prod.js"
+    "build": "webpack  --config ./webpacks/webpack.prod.js",
+    "deploy": "gh-pages -d build",
+    "predeploy": "yarn build"
   },
   "dependencies": {
     "@emotion/react": "^11.10.0",
@@ -16,6 +19,7 @@
     "@mui/material": "^5.10.2",
     "@mui/styles": "^5.10.2",
     "axios": "^0.27.2",
+    "gh-pages": "^4.0.0",
     "process": "^0.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

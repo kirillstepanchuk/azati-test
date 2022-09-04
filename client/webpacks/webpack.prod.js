@@ -6,6 +6,6 @@ module.exports = merge(common('prod'), {
   mode: 'production',
   output: {
     filename: '[chunkhash].js',
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, '../build'),
   },
 });
