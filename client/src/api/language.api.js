@@ -13,8 +13,7 @@ export const fetchLanguages = async () => {
     }
   };
 
-  const response = await axios.request(options);
-
+  // const response = await axios.request(options);
   // return response.data;
 
   // Mock data, problems with get languages from API.
