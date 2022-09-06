@@ -38,12 +38,12 @@ const TranslatorContent = () => {
   const classes = useStyles();
 
   const [inputText, setInputText] = useState("");
+  const [outputText, setOutputText] = useState("");
   const [inputLanguage, setInputLanguage] = useState(DETECT_LANGUAGE);
   const [outputLanguage, setOutputLanguage] = useState(DEFAULT_OUTPUT_LANGUAGE);
 
   const dispatch = useDispatch();
   const languages = useSelector((state) => state.languages);
-  // const detectedLanguage = useSelector((state) => state.detectedLanguage);
   const translation = useSelector((state) => state.translation);
 
   const translationText = translation?.data?.text[0].translations[0].text;
@@ -59,7 +59,7 @@ const TranslatorContent = () => {
     const temptInputLanguage = Object.assign({}, inputLanguage);
     const tempOutputLanguage = Object.assign({}, outputLanguage);
 
-    const tempOutputText = translationText;
+    const tempOutputText = outputText;
 
     setOutputLanguage(temptInputLanguage);
     setInputLanguage(tempOutputLanguage);
@@ -78,7 +78,7 @@ const TranslatorContent = () => {
     },
     to: {
       language: outputLanguage,
-      text: translationText,
+      text: outputText,
     },
   };
 
@@ -111,10 +111,7 @@ const TranslatorContent = () => {
         translateText(textWithoutLineBreaks, fromLanguage, outputLanguage.value)
       );
 
-      if (translationData.to.text) {
-        dispatch(addTranslationToHistory(translationData));
-      }
-
+      setOutputText(translationText);
       setFavoriteChecked(isFavoriteTranslationExists(translationData));
     }
   }, [
@@ -122,11 +119,19 @@ const TranslatorContent = () => {
     inputLanguage.label,
     outputLanguage.label,
     detectedLanguage,
-    translationText,
+    outputText,
   ]);
 
   useEffect(() => {
+    console.log("1");
+    if (outputText && inputText) {
+      dispatch(addTranslationToHistory(translationData));
+    }
+  }, [outputText]);
+
+  useEffect(() => {
     dispatch(getLanguages());
+    setOutputText("");
   }, []);
 
   const possibleLanguages = languages.data?.languages || [];
@@ -209,7 +214,7 @@ const TranslatorContent = () => {
                   fullWidth
                   multiline
                   minRows={4}
-                  value={translationText || ""}
+                  value={outputText || ""}
                 />
               )}
             </Grid>

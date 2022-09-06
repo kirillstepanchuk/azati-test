@@ -3,7 +3,6 @@ import { Grid, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const HistoryItem = ({ translation }) => {
-  console.log("translation: ", translation.translation);
   return (
     <Grid item xs={12}>
       <Grid
