@@ -12,7 +12,7 @@ const reducer = (
     case ADD_TRANSLATION_TO_FAVORITES:
       const newAddState = {
         ...state,
-        favoritesTranslations: [...state.favoritesTranslations, action.payload],
+        favoritesTranslations: [action.payload, ...state.favoritesTranslations],
       };
 
       localStorage.setItem(
@@ -23,7 +23,6 @@ const reducer = (
       return newAddState;
 
     case REMOVE_TRANSLATION_FROM_FAVORITES:
-      state.favoritesTranslations.reverse();
 
       const indexOfProduct = state.favoritesTranslations.findIndex((object) => JSON.stringify(object) === JSON.stringify(action.payload));
 
@@ -35,7 +34,7 @@ const reducer = (
 
       const newRemoveState = {
         ...state,
-        favoritesTranslations: [...state.favoritesTranslations.reverse()],
+        favoritesTranslations: [...state.favoritesTranslations],
       };
 
       localStorage.setItem(

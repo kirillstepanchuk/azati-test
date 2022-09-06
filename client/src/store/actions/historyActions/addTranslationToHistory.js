@@ -1,9 +1,9 @@
 import { ADD_TRANSLATION_TO_HISTORY } from "../../actionTypes";
 
-const addTranslationToHistory = (transaltion) => ({
+const addTranslationToHistory = (translation) => ({
   type: ADD_TRANSLATION_TO_HISTORY,
   payload: {
-    transaltion,
+    translation,
   }
 });
 

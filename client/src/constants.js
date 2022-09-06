@@ -1,7 +1,10 @@
 export const ROUTE_PAGES = {
   main: '/',
   favorites: '/favorites',
+  history: "/history",
 };
+
+export const TRANSLATION_DELAY = 1000;
 
 export const DETECT_LANGUAGE = {
   label: "Detect language",

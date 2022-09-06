@@ -3,9 +3,6 @@ import {
   AppBar,
   Grid,
   IconButton,
-  Toolbar,
-  Typography,
-  Box,
   Menu,
   MenuItem,
   Button,
@@ -13,12 +10,12 @@ import {
 import { makeStyles, createStyles } from "@mui/styles";
 import TranslateIcon from "@mui/icons-material/Translate";
 import MenuIcon from "@mui/icons-material/Menu";
-
 import { Link as RouterLink } from "react-router-dom";
 
 import { ROUTE_PAGES } from "../../constants";
-import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
-import Container from "../Container/Container";
+import ThemeSwitch from "../ThemeSwitch";
+import Container from "../Container";
+import { useCallback } from "react";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -30,16 +27,16 @@ const useStyles = makeStyles((theme) =>
 );
 
 const Header = () => {
-  const [anchorElNav, setAnchorElNav] = useState(null);
   const classes = useStyles();
+  const [anchorElNav, setAnchorElNav] = useState(null);
 
-  const handleOpenNavMenu = (event) => {
+  const handleOpenNavMenu = useCallback((event) => {
     setAnchorElNav(event.currentTarget);
-  };
+  }, []);
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = useCallback(() => {
     setAnchorElNav(null);
-  };
+  }, []);
 
   return (
     <AppBar position="relative" className={classes.mainContainer}>
@@ -89,6 +86,17 @@ const Header = () => {
                     Favorites
                   </Button>
                 </MenuItem>
+
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Button
+                    component={RouterLink}
+                    size="small"
+                    to={ROUTE_PAGES.history}
+                    color="headerMenuLink"
+                  >
+                    History
+                  </Button>
+                </MenuItem>
               </Menu>
             </Grid>
 
@@ -111,6 +119,16 @@ const Header = () => {
                 color="headerLink"
               >
                 Favorites
+              </Button>
+
+              <Button
+                component={RouterLink}
+                size="small"
+                to={ROUTE_PAGES.history}
+                className={classes.link}
+                color="headerLink"
+              >
+                History
               </Button>
             </Grid>
           </Grid>
