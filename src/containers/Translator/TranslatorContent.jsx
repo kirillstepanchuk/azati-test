@@ -81,7 +81,7 @@ const TranslatorContent = () => {
     const temptInputLanguage = Object.assign({}, inputLanguage);
     const tempOutputLanguage = Object.assign({}, outputLanguage);
 
-    const tempOutputText = outputText;
+    const tempOutputText = translationText;
 
     setOutputLanguage(temptInputLanguage);
     setInputLanguage(tempOutputLanguage);
@@ -119,9 +119,6 @@ const TranslatorContent = () => {
   useEffect(() => {
     if (inputLanguage.value !== DETECT_LANGUAGE.value) {
       dispatch(detectLanguage(inputText));
-
-      console.log("input1", inputLanguage.value);
-      console.log("input1", detLanguage?.data?.language[0]?.language);
 
       if (detLanguage?.data?.language[0]?.language) {
         setIsLanguagesMatch(
