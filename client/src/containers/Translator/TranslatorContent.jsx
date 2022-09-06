@@ -6,7 +6,7 @@ import { makeStyles, createStyles } from "@mui/styles";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import SyncIcon from "@mui/icons-material/Sync";
-import { Checkbox, Skeleton, IconButton } from "@mui/material";
+import { Checkbox, Skeleton, IconButton, Typography } from "@mui/material";
 
 import useDebounce from "../../hooks/useDebounce";
 import Container from "../../components/Container";
@@ -41,13 +41,16 @@ const TranslatorContent = () => {
   const [outputText, setOutputText] = useState("");
   const [inputLanguage, setInputLanguage] = useState(DETECT_LANGUAGE);
   const [outputLanguage, setOutputLanguage] = useState(DEFAULT_OUTPUT_LANGUAGE);
+  const [isLanguagesMatch, setIsLanguagesMatch] = useState(false);
 
   const dispatch = useDispatch();
   const languages = useSelector((state) => state.languages);
   const translation = useSelector((state) => state.translation);
+  const detLanguage = useSelector((state) => state.detectedLanguage);
 
   const translationText = translation?.data?.text[0].translations[0].text;
-  const detectedLanguage = translation?.data?.text[0].detectedLanguage.language;
+  const detectedLanguage =
+    translation?.data?.text[0].detectedLanguage?.language;
 
   const debounsedTranslate = useDebounce(inputText, TRANSLATION_DELAY);
 
@@ -111,6 +114,21 @@ const TranslatorContent = () => {
         translateText(textWithoutLineBreaks, fromLanguage, outputLanguage.value)
       );
 
+      if (inputLanguage.value !== DETECT_LANGUAGE.value) {
+        dispatch(detectLanguage(inputText));
+
+        // console.log("detLanguage?.data?.language[0]?.language: ", detLanguage);
+        // if (
+        //   detLanguage?.data?.language[0]?.language &&
+        //   inputLanguage.value !== detLanguage?.data?.language[0]?.language
+        // ) {
+        //   console.log("ne ravno");
+        // }
+        setIsLanguagesMatch(
+          inputLanguage.value !== detLanguage?.data?.language[0]?.language
+        );
+      }
+
       setOutputText(translationText);
       setFavoriteChecked(isFavoriteTranslationExists(translationData));
     }
@@ -118,12 +136,12 @@ const TranslatorContent = () => {
     debounsedTranslate,
     inputLanguage.label,
     outputLanguage.label,
+    detLanguage?.data?.language[0]?.language,
     detectedLanguage,
     outputText,
   ]);
 
   useEffect(() => {
-    console.log("1");
     if (outputText && inputText) {
       dispatch(addTranslationToHistory(translationData));
     }
@@ -166,13 +184,22 @@ const TranslatorContent = () => {
                 onChange={onInputTextChange}
               />
             </Grid>
+
+            <Grid item>
+              {isLanguagesMatch && (
+                <Typography>
+                  Perhaps you need to change the keyboard layout or input
+                  language
+                </Typography>
+              )}
+            </Grid>
           </Grid>
         </Grid>
 
         <Grid item xs={2}>
           <Grid
             container
-            direction="column"
+            direction={{ xs: "row", md: "column" }}
             alignItems="center"
             justifyContent="center"
           >
