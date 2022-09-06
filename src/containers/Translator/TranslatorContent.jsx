@@ -48,7 +48,7 @@ const TranslatorContent = () => {
   const translation = useSelector((state) => state.translation);
   const detLanguage = useSelector((state) => state.detectedLanguage);
 
-  const translationText = translation?.data?.text[0].translations[0].text;
+  const translationText = translation?.data?.text[0]?.translations[0]?.text;
   const detectedLanguage =
     translation?.data?.text[0].detectedLanguage?.language;
 
@@ -74,8 +74,8 @@ const TranslatorContent = () => {
     from: {
       language:
         inputLanguage.value === DETECT_LANGUAGE.value &&
-        translation?.data?.text[0].detectedLanguage.language
-          ? findLanguage(translation?.data?.text[0].detectedLanguage.language)
+        translation?.data?.text[0]?.detectedLanguage?.language
+          ? findLanguage(translation?.data?.text[0]?.detectedLanguage?.language)
           : inputLanguage,
       text: inputText,
     },
@@ -145,7 +145,7 @@ const TranslatorContent = () => {
     if (outputText && inputText) {
       dispatch(addTranslationToHistory(translationData));
     }
-  }, [outputText]);
+  }, [debounsedTranslate, outputText]);
 
   useEffect(() => {
     dispatch(getLanguages());
