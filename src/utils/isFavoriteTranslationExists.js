@@ -1,7 +1,9 @@
 const isFavoriteTranslationExists = (translation) => {
-  const favoriteTranslations = localStorage.getItem("favoritesTranslations") || [];
+  const favoriteTranslations = JSON.parse(localStorage.getItem("favoritesTranslations")) || [];
 
-  return favoriteTranslations.includes(JSON.stringify(translation))
+  const isExists = favoriteTranslations.filter((tr) => JSON.stringify(translation) === JSON.stringify(tr)).length !== 0;
+
+  return isExists;
 }
 
 export default isFavoriteTranslationExists;

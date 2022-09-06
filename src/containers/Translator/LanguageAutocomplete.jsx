@@ -7,6 +7,10 @@ const LanguageAutocomplete = ({
   setLanguage,
   loading,
 }) => {
+  const onAutocompleteValueChange = (event, newValue) => {
+    setLanguage(newValue);
+  };
+
   return (
     <Autocomplete
       style={{
@@ -18,9 +22,7 @@ const LanguageAutocomplete = ({
       loading={loading}
       options={languages}
       value={currentLanguage}
-      onChange={(event, newValue) => {
-        setLanguage(newValue);
-      }}
+      onChange={onAutocompleteValueChange}
       renderInput={(params) => (
         <TextField
           {...params}

@@ -24,9 +24,9 @@ const HistoryList = () => {
   const dispatch = useDispatch();
   const { historyTranslations } = useSelector((state) => state.history);
 
-  const onClearButtonClick = useCallback(() => {
+  const onClearButtonClick = () => {
     dispatch(clearTranslationHistory());
-  }, []);
+  };
 
   return (
     <Container>

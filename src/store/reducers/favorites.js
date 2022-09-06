@@ -12,7 +12,7 @@ const reducer = (
     case ADD_TRANSLATION_TO_FAVORITES:
       const newAddState = {
         ...state,
-        favoritesTranslations: [action.payload, ...state.favoritesTranslations],
+        favoritesTranslations: [action.payload.translation, ...state.favoritesTranslations],
       };
 
       localStorage.setItem(
@@ -24,7 +24,7 @@ const reducer = (
 
     case REMOVE_TRANSLATION_FROM_FAVORITES:
 
-      const indexOfProduct = state.favoritesTranslations.findIndex((object) => JSON.stringify(object) === JSON.stringify(action.payload));
+      const indexOfProduct = state.favoritesTranslations.findIndex((object) => JSON.stringify(object) === JSON.stringify(action.payload.translation));
 
       if (indexOfProduct === -1) {
         return state;

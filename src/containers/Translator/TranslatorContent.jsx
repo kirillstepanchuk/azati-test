@@ -1,12 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
 import { makeStyles, createStyles } from "@mui/styles";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import SyncIcon from "@mui/icons-material/Sync";
-import { Checkbox, Skeleton, IconButton, Typography } from "@mui/material";
+import {
+  Checkbox,
+  Skeleton,
+  IconButton,
+  Typography,
+  Grid,
+  TextField,
+} from "@mui/material";
 
 import useDebounce from "../../hooks/useDebounce";
 import Container from "../../components/Container";
@@ -50,9 +55,23 @@ const TranslatorContent = () => {
 
   const translationText = translation?.data?.text[0]?.translations[0]?.text;
   const detectedLanguage =
-    translation?.data?.text[0].detectedLanguage?.language;
+    translation?.data?.text[0]?.detectedLanguage?.language;
 
   const debounsedTranslate = useDebounce(inputText, TRANSLATION_DELAY);
+
+  const translationData = {
+    from: {
+      language:
+        inputLanguage.value === DETECT_LANGUAGE.value && detectedLanguage
+          ? findLanguage(detectedLanguage)
+          : inputLanguage,
+      text: inputText,
+    },
+    to: {
+      language: outputLanguage,
+      text: outputText,
+    },
+  };
 
   const onInputTextChange = useCallback((event) => {
     setInputText(event.target.value);
@@ -70,21 +89,6 @@ const TranslatorContent = () => {
     setInputText(tempOutputText);
   }, [inputLanguage, outputLanguage, translation]);
 
-  const translationData = {
-    from: {
-      language:
-        inputLanguage.value === DETECT_LANGUAGE.value &&
-        translation?.data?.text[0]?.detectedLanguage?.language
-          ? findLanguage(translation?.data?.text[0]?.detectedLanguage?.language)
-          : inputLanguage,
-      text: inputText,
-    },
-    to: {
-      language: outputLanguage,
-      text: outputText,
-    },
-  };
-
   const [favoriteChecked, setFavoriteChecked] = useState(
     isFavoriteTranslationExists(translationData)
   );
@@ -98,54 +102,48 @@ const TranslatorContent = () => {
       }
       setFavoriteChecked(isFavoriteTranslationExists(translationData));
     },
-    [inputText, translationData]
+    [debounsedTranslate, translationData]
   );
 
   useEffect(() => {
     const textWithoutLineBreaks = getStringWithoutLineBreaks(inputText);
 
-    if (textWithoutLineBreaks !== "") {
-      const fromLanguage =
-        inputLanguage.value === DETECT_LANGUAGE.value
-          ? ""
-          : inputLanguage.value;
+    const fromLanguage =
+      inputLanguage.value === DETECT_LANGUAGE.value ? "" : inputLanguage.value;
 
-      dispatch(
-        translateText(textWithoutLineBreaks, fromLanguage, outputLanguage.value)
-      );
+    dispatch(
+      translateText(textWithoutLineBreaks, fromLanguage, outputLanguage.value)
+    );
+  }, [debounsedTranslate, inputLanguage.label, outputLanguage.label]);
 
-      if (inputLanguage.value !== DETECT_LANGUAGE.value) {
-        dispatch(detectLanguage(inputText));
+  useEffect(() => {
+    if (inputLanguage.value !== DETECT_LANGUAGE.value) {
+      dispatch(detectLanguage(inputText));
 
-        // console.log("detLanguage?.data?.language[0]?.language: ", detLanguage);
-        // if (
-        //   detLanguage?.data?.language[0]?.language &&
-        //   inputLanguage.value !== detLanguage?.data?.language[0]?.language
-        // ) {
-        //   console.log("ne ravno");
-        // }
+      console.log("input1", inputLanguage.value);
+      console.log("input1", detLanguage?.data?.language[0]?.language);
+
+      if (detLanguage?.data?.language[0]?.language) {
         setIsLanguagesMatch(
           inputLanguage.value !== detLanguage?.data?.language[0]?.language
         );
       }
-
-      setOutputText(translationText);
-      setFavoriteChecked(isFavoriteTranslationExists(translationData));
     }
-  }, [
-    debounsedTranslate,
-    inputLanguage.label,
-    outputLanguage.label,
-    detLanguage?.data?.language[0]?.language,
-    detectedLanguage,
-    outputText,
-  ]);
+  }, [outputText, detLanguage?.data?.language[0]?.language]);
+
+  useEffect(() => {
+    setFavoriteChecked(isFavoriteTranslationExists(translationData));
+  }, [outputText]);
+
+  useEffect(() => {
+    setOutputText(translationText);
+  }, [translationText]);
 
   useEffect(() => {
     if (outputText && inputText) {
       dispatch(addTranslationToHistory(translationData));
     }
-  }, [debounsedTranslate, outputText]);
+  }, [outputText]);
 
   useEffect(() => {
     dispatch(getLanguages());

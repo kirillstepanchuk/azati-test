@@ -5,6 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const FavoriteItem = ({ translation, onDeleteButtonClick }) => {
+  console.log("translation: ", translation);
   return (
     <Grid item xs={12}>
       <Grid
@@ -15,9 +16,7 @@ const FavoriteItem = ({ translation, onDeleteButtonClick }) => {
       >
         <Grid item xs={5.5}>
           <Grid container justifyContent="flex-end" alignItems="center">
-            <Typography>
-              {translation.translation.from.language.label}
-            </Typography>
+            <Typography>{translation.from.language.label}</Typography>
           </Grid>
         </Grid>
         <Grid item xs={1}>
@@ -27,8 +26,8 @@ const FavoriteItem = ({ translation, onDeleteButtonClick }) => {
         </Grid>
         <Grid item xs={5.5}>
           <Grid container justifyContent="flex-start" alignItems="center">
-            <Typography>{translation.translation.to.language.label}</Typography>
-            <IconButton onClick={onDeleteButtonClick(translation.translation)}>
+            <Typography>{translation.to.language.label}</Typography>
+            <IconButton onClick={onDeleteButtonClick(translation)}>
               <DeleteIcon />
             </IconButton>
           </Grid>
@@ -42,13 +41,13 @@ const FavoriteItem = ({ translation, onDeleteButtonClick }) => {
       >
         <Grid item xs={5.5}>
           <Grid container justifyContent="flex-end">
-            <Typography>{translation.translation.from.text}</Typography>
+            <Typography>{translation.from.text}</Typography>
           </Grid>
         </Grid>
         <Grid item xs={1}></Grid>
         <Grid item xs={5.5}>
           <Grid container justifyContent="flex-start">
-            <Typography>{translation.translation.to.text}</Typography>
+            <Typography>{translation.to.text}</Typography>
           </Grid>
         </Grid>
       </Grid>
