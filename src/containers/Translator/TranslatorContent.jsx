@@ -200,7 +200,7 @@ const TranslatorContent = () => {
           >
             <IconButton
               disabled={inputLanguage.value === DETECT_LANGUAGE.value}
-              color="headerLink"
+              color="iconButton"
               onClick={onChangeLanguagesButtonClick}
             >
               <SyncIcon />
@@ -209,6 +209,7 @@ const TranslatorContent = () => {
             <Checkbox
               disabled={translation?.loading || inputText === ""}
               checked={favoriteChecked}
+              color="iconButton"
               onChange={onFavoritesButtonChange}
               icon={<StarBorderIcon />}
               checkedIcon={<StarIcon />}

@@ -32,6 +32,10 @@ const CustomThemeProvider = ({ children }) => {
             mode === "light"
               ? { main: "#000", contrastText: "#000" }
               : { main: "#fff", contrastText: "#fff" },
+          iconButton:
+            mode === "light"
+              ? { main: "#1976d2", contrastText: "#1976d2" }
+              : { main: "#fff", contrastText: "#fff" },
         },
         spacing: 5,
         typography: {
