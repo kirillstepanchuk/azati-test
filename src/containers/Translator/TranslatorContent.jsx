@@ -116,14 +116,6 @@ const TranslatorContent = () => {
 
       if (inputLanguage.value !== DETECT_LANGUAGE.value) {
         dispatch(detectLanguage(inputText));
-
-        // console.log("detLanguage?.data?.language[0]?.language: ", detLanguage);
-        // if (
-        //   detLanguage?.data?.language[0]?.language &&
-        //   inputLanguage.value !== detLanguage?.data?.language[0]?.language
-        // ) {
-        //   console.log("ne ravno");
-        // }
         setIsLanguagesMatch(
           inputLanguage.value !== detLanguage?.data?.language[0]?.language
         );
