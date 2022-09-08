@@ -40,7 +40,7 @@ const HistoryList = () => {
         {historyTranslations.length ? (
           <>
             <Button
-              color="headerMenuLink"
+              color="link"
               onClick={onClearButtonClick}
               variant="outlined"
               startIcon={<DeleteIcon />}

@@ -1,30 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles, createStyles } from "@mui/styles";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import StarIcon from "@mui/icons-material/Star";
-import SyncIcon from "@mui/icons-material/Sync";
-import {
-  Checkbox,
-  Skeleton,
-  IconButton,
-  Typography,
-  Grid,
-  TextField,
-} from "@mui/material";
+import { Skeleton, Typography, Grid, TextField } from "@mui/material";
 
-import useDebounce from "../../hooks/useDebounce";
+import SwitchLanguages from "./SwitchLanguages";
+import AddToFavoriteButton from "./AddToFavoriteButton";
 import Container from "../../components/Container";
 import LanguageAutocomplete from "./LanguageAutocomplete";
 import getLanguages from "../../store/actions/languageActions/getLanguages";
 import detectLanguage from "../../store/actions/languageActions/detectLanguages";
 import translateText from "../../store/actions/translationActions/translateText";
-import addTranslationToFavorites from "../../store/actions/favoritesActions/addTranslationToFavorites";
 import addTranslationToHistory from "../../store/actions/historyActions/addTranslationToHistory";
-import removeTranslationFromFavorites from "../../store/actions/favoritesActions/removeTranslationFromFavorites";
-import isFavoriteTranslationExists from "../../utils/isFavoriteTranslationExists";
 import getStringWithoutLineBreaks from "../../utils/getStringWithoutLinebreaks";
 import findLanguage from "../../utils/findLanguage";
+import useDebounce from "../../hooks/useDebounce";
 import {
   DETECT_LANGUAGE,
   DEFAULT_OUTPUT_LANGUAGE,
@@ -51,10 +40,11 @@ const TranslatorContent = () => {
   const dispatch = useDispatch();
   const languages = useSelector((state) => state.languages);
   const translation = useSelector((state) => state.translation);
-  const detLanguage = useSelector((state) => state.detectedLanguage);
+  const detectedLanguage = useSelector((state) => state.detectedLanguage);
 
   const translationText = translation?.data?.text[0]?.translations[0]?.text;
-  const detectedLanguage =
+  const detectedLanguageValue = detectedLanguage?.data?.language[0]?.language;
+  const detectedLanguageFromTranslate =
     translation?.data?.text[0]?.detectedLanguage?.language;
 
   const debounsedTranslate = useDebounce(inputText, TRANSLATION_DELAY);
@@ -62,8 +52,9 @@ const TranslatorContent = () => {
   const translationData = {
     from: {
       language:
-        inputLanguage.value === DETECT_LANGUAGE.value && detectedLanguage
-          ? findLanguage(detectedLanguage)
+        inputLanguage.value === DETECT_LANGUAGE.value &&
+        detectedLanguageFromTranslate
+          ? findLanguage(detectedLanguageFromTranslate)
           : inputLanguage,
       text: inputText,
     },
@@ -76,34 +67,6 @@ const TranslatorContent = () => {
   const onInputTextChange = useCallback((event) => {
     setInputText(event.target.value);
   }, []);
-
-  const onChangeLanguagesButtonClick = useCallback(() => {
-    const temptInputLanguage = Object.assign({}, inputLanguage);
-    const tempOutputLanguage = Object.assign({}, outputLanguage);
-
-    const tempOutputText = translationText;
-
-    setOutputLanguage(temptInputLanguage);
-    setInputLanguage(tempOutputLanguage);
-
-    setInputText(tempOutputText);
-  }, [inputLanguage, outputLanguage, translation]);
-
-  const [favoriteChecked, setFavoriteChecked] = useState(
-    isFavoriteTranslationExists(translationData)
-  );
-
-  const onFavoritesButtonChange = useCallback(
-    (event) => {
-      if (event.target.checked && inputText) {
-        dispatch(addTranslationToFavorites(translationData));
-      } else if (!event.target.checked) {
-        dispatch(removeTranslationFromFavorites(translationData));
-      }
-      setFavoriteChecked(isFavoriteTranslationExists(translationData));
-    },
-    [debounsedTranslate, translationData]
-  );
 
   useEffect(() => {
     const textWithoutLineBreaks = getStringWithoutLineBreaks(inputText);
@@ -120,17 +83,11 @@ const TranslatorContent = () => {
     if (inputLanguage.value !== DETECT_LANGUAGE.value) {
       dispatch(detectLanguage(inputText));
 
-      if (detLanguage?.data?.language[0]?.language) {
-        setIsLanguagesMatch(
-          inputLanguage.value !== detLanguage?.data?.language[0]?.language
-        );
+      if (detectedLanguageValue) {
+        setIsLanguagesMatch(inputLanguage.value !== detectedLanguageValue);
       }
     }
-  }, [outputText, detLanguage?.data?.language[0]?.language]);
-
-  useEffect(() => {
-    setFavoriteChecked(isFavoriteTranslationExists(translationData));
-  }, [outputText]);
+  }, [outputText, detectedLanguageValue]);
 
   useEffect(() => {
     setOutputText(translationText);
@@ -198,21 +155,21 @@ const TranslatorContent = () => {
             alignItems="center"
             justifyContent="center"
           >
-            <IconButton
-              disabled={inputLanguage.value === DETECT_LANGUAGE.value}
-              color="iconButton"
-              onClick={onChangeLanguagesButtonClick}
-            >
-              <SyncIcon />
-            </IconButton>
+            <SwitchLanguages
+              inputLanguage={inputLanguage}
+              setInputLanguage={setInputLanguage}
+              outputLanguage={outputLanguage}
+              setOutputLanguage={setOutputLanguage}
+              setInputText={setInputText}
+              translationText={translationText}
+            />
 
-            <Checkbox
-              disabled={translation?.loading || inputText === ""}
-              checked={favoriteChecked}
-              color="iconButton"
-              onChange={onFavoritesButtonChange}
-              icon={<StarBorderIcon />}
-              checkedIcon={<StarIcon />}
+            <AddToFavoriteButton
+              inputValue={debounsedTranslate}
+              translationData={translationData}
+              loading={translation.loading}
+              inputTex={inputText}
+              outputText={outputText}
             />
           </Grid>
         </Grid>

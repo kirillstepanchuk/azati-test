@@ -2,18 +2,25 @@ import React, { useState, useMemo, createContext } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 
+import { THEMES, COLORS } from "../../constants";
+
 export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 const CustomThemeProvider = ({ children }) => {
   const [mode, setMode] = useState(
-    localStorage.getItem("themeMode") || "light"
+    localStorage.getItem("themeMode") || THEMES.light
   );
 
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
-        localStorage.setItem("themeMode", mode === "light" ? "dark" : "light");
+        setMode((prevMode) =>
+          prevMode === THEMES.light ? THEMES.dark : THEMES.light
+        );
+        localStorage.setItem(
+          "themeMode",
+          mode === THEMES.light ? THEMES.dark : THEMES.light
+        );
       },
     }),
     []
@@ -25,17 +32,17 @@ const CustomThemeProvider = ({ children }) => {
         palette: {
           mode,
           headerLink: {
-            main: "#fff",
-            contrastText: "#fff",
+            main: COLORS.white,
+            contrastText: COLORS.white,
           },
-          headerMenuLink:
-            mode === "light"
-              ? { main: "#000", contrastText: "#000" }
-              : { main: "#fff", contrastText: "#fff" },
+          link:
+            mode === THEMES.light
+              ? { main: COLORS.black, contrastText: COLORS.black }
+              : { main: COLORS.white, contrastText: COLORS.white },
           iconButton:
-            mode === "light"
-              ? { main: "#1976d2", contrastText: "#1976d2" }
-              : { main: "#fff", contrastText: "#fff" },
+            mode === THEMES.light
+              ? { main: COLORS.blue, contrastText: COLORS.blue }
+              : { main: COLORS.white, contrastText: COLORS.white },
         },
         spacing: 5,
         typography: {

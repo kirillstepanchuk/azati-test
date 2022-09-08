@@ -20,7 +20,6 @@ const FavoriteList = () => {
 
   const dispatch = useDispatch();
   const { favoritesTranslations } = useSelector((state) => state.favorites);
-  console.log("favoritesTranslations: ", favoritesTranslations);
 
   const onDeleteButtonClick = (tr) => {
     return () => {

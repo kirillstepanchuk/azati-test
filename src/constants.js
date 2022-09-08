@@ -1,10 +1,21 @@
+export const TRANSLATION_DELAY = 1000;
+
 export const ROUTE_PAGES = {
   main: '/',
   favorites: '/favorites',
   history: "/history",
 };
 
-export const TRANSLATION_DELAY = 1000;
+export const THEMES = {
+  light: "light",
+  dark: "dark",
+}
+
+export const COLORS = {
+  white: "#fff",
+  black: "#000",
+  blue: "#1976d2",
+}
 
 export const DETECT_LANGUAGE = {
   label: "Detect language",

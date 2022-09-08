@@ -5,7 +5,6 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const FavoriteItem = ({ translation, onDeleteButtonClick }) => {
-  console.log("translation: ", translation);
   return (
     <Grid item xs={12}>
       <Grid

@@ -70,7 +70,7 @@ const Header = () => {
                     component={RouterLink}
                     size="small"
                     to={ROUTE_PAGES.main}
-                    color="headerMenuLink"
+                    color="link"
                   >
                     Translator
                   </Button>
@@ -81,7 +81,7 @@ const Header = () => {
                     component={RouterLink}
                     size="small"
                     to={ROUTE_PAGES.favorites}
-                    color="headerMenuLink"
+                    color="link"
                   >
                     Favorites
                   </Button>
@@ -92,7 +92,7 @@ const Header = () => {
                     component={RouterLink}
                     size="small"
                     to={ROUTE_PAGES.history}
-                    color="headerMenuLink"
+                    color="link"
                   >
                     History
                   </Button>
