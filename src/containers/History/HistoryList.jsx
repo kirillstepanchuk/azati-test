@@ -4,6 +4,7 @@ import { Grid, Typography } from "@mui/material";
 import { makeStyles, createStyles } from "@mui/styles";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { nanoid } from "nanoid";
 
 import HistoryItem from "./HistoryItem";
 import Container from "../../components/Container";
@@ -47,8 +48,8 @@ const HistoryList = () => {
             >
               Clear history
             </Button>
-            {historyTranslations.map((tr, index) => (
-              <HistoryItem translation={tr} key={index} />
+            {historyTranslations.map((historyElement) => (
+              <HistoryItem translation={historyElement} key={nanoid()} />
             ))}
           </>
         ) : (

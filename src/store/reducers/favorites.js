@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { ADD_TRANSLATION_TO_FAVORITES, REMOVE_TRANSLATION_FROM_FAVORITES } from "../actionTypes";
 
 const initialState = {
@@ -24,7 +26,7 @@ const reducer = (
 
     case REMOVE_TRANSLATION_FROM_FAVORITES:
 
-      const indexOfProduct = state.favoritesTranslations.findIndex((object) => JSON.stringify(object) === JSON.stringify(action.payload.translation));
+      const indexOfProduct = state.favoritesTranslations.findIndex((object) => _.isEqual(object, action.payload.translation));
 
       if (indexOfProduct === -1) {
         return state;

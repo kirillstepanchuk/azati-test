@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Typography } from "@mui/material";
 import { makeStyles, createStyles } from "@mui/styles";
+import { nanoid } from "nanoid";
 
 import FavoriteItem from "./FavoriteItem";
 import Container from "../../components/Container";
@@ -21,9 +22,9 @@ const FavoriteList = () => {
   const dispatch = useDispatch();
   const { favoritesTranslations } = useSelector((state) => state.favorites);
 
-  const onDeleteButtonClick = (tr) => {
+  const onDeleteButtonClick = (translationData) => {
     return () => {
-      dispatch(removeTranslationFromFavorites(tr));
+      dispatch(removeTranslationFromFavorites(translationData));
     };
   };
 
@@ -37,11 +38,11 @@ const FavoriteList = () => {
         justifyContent="center"
       >
         {favoritesTranslations.length ? (
-          favoritesTranslations.map((tr, index) => (
+          favoritesTranslations.map((favoriteElement) => (
             <FavoriteItem
-              translation={tr}
+              translation={favoriteElement}
               onDeleteButtonClick={onDeleteButtonClick}
-              key={index}
+              key={nanoid()}
             />
           ))
         ) : (
