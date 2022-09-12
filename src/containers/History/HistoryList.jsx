@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Typography } from "@mui/material";
 import { makeStyles, createStyles } from "@mui/styles";
@@ -8,7 +8,6 @@ import { nanoid } from "nanoid";
 
 import HistoryItem from "./HistoryItem";
 import Container from "../../components/Container";
-import removeTranslationFromFavorites from "../../store/actions/favoritesActions/removeTranslationFromFavorites";
 import clearTranslationHistory from "../../store/actions/historyActions/clearTranslationHistory";
 
 const useStyles = makeStyles((theme) =>

@@ -168,7 +168,7 @@ const TranslatorContent = () => {
               inputValue={debounsedTranslate}
               translationData={translationData}
               loading={translation.loading}
-              inputTex={inputText}
+              inputText={inputText}
               outputText={outputText}
             />
           </Grid>
