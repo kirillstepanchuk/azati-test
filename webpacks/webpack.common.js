@@ -1,5 +1,6 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
 
 const minifyHtmlPluginParameters = {
@@ -27,6 +28,7 @@ module.exports = () => {
       extensions: ['', '.js', '.jsx'],
     },
     plugins: [
+      new Dotenv(),
       new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         template: './src/index.html',

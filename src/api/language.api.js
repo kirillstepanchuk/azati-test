@@ -1,15 +1,15 @@
 import axios from "axios";
 
-import { LANGUAGES } from "../constants";
+import { LANGUAGES, API_URL, API_HOST, API_KEY } from "../constants";
 
 export const fetchLanguages = async () => {
   const options = {
     method: 'GET',
-    url: 'https://microsoft-translator-text.p.rapidapi.com/languages',
+    url: `${API_URL}/languages`,
     params: { 'api-version': '3.0', scope: 'translation' },
     headers: {
-      'X-RapidAPI-Key': '0d4b0d9f0emsh4ffd214bfa4b80ep1ea384jsna97179322795',
-      'X-RapidAPI-Host': 'microsoft-translator-text.p.rapidapi.com'
+      'X-RapidAPI-Key': API_KEY,
+      'X-RapidAPI-Host': API_HOST,
     }
   };
 
@@ -24,12 +24,12 @@ export const fetchLanguages = async () => {
 export const fetchDetectedLanguage = async (text) => {
   const options = {
     method: 'POST',
-    url: 'https://microsoft-translator-text.p.rapidapi.com/Detect',
+    url: `${API_URL}/Detect`,
     params: { 'api-version': '3.0' },
     headers: {
       'content-type': 'application/json',
-      'X-RapidAPI-Key': "0d4b0d9f0emsh4ffd214bfa4b80ep1ea384jsna97179322795",
-      'X-RapidAPI-Host': "microsoft-translator-text.p.rapidapi.com",
+      'X-RapidAPI-Key': API_KEY,
+      'X-RapidAPI-Host': API_HOST,
     },
     data: `[{"Text":"${text}"}]`,
   };

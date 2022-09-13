@@ -5,8 +5,9 @@ import { Skeleton, Grid, TextField } from "@mui/material";
 
 import SwitchLanguages from "./SwitchLanguages";
 import AddToFavoriteButton from "./AddToFavoriteButton";
-import Container from "../../components/Container";
+import WrongLanguageMessage from "./WrongLanguageMessage";
 import LanguageAutocomplete from "./LanguageAutocomplete";
+import Container from "../../components/Container";
 import getLanguages from "../../store/actions/languageActions/getLanguages";
 import translateText from "../../store/actions/translationActions/translateText";
 import addTranslationToHistory from "../../store/actions/historyActions/addTranslationToHistory";
@@ -18,7 +19,6 @@ import {
   DEFAULT_OUTPUT_LANGUAGE,
   TRANSLATION_DELAY,
 } from "../../constants";
-import WrongLanguageMessage from "./WrongLanguageMessage";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

@@ -1,3 +1,7 @@
+export const API_URL = process.env.API_URL || "https://microsoft-translator-text.p.rapidapi.com";
+export const API_HOST = process.env.API_HOST || "microsoft-translator-text.p.rapidapi.com";
+export const API_KEY = process.env.API_KEY || "0d4b0d9f0emsh4ffd214bfa4b80ep1ea384jsna97179322795";
+
 export const TRANSLATION_DELAY = 1000;
 
 export const ROUTE_PAGES = {

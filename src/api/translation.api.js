@@ -1,9 +1,11 @@
 import axios from "axios";
 
+import { API_URL, API_HOST, API_KEY } from "../constants";
+
 export const fetchTranslation = async (text, inputLanguage, outputLanguage) => {
   const options = {
     method: 'POST',
-    url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
+    url: `${API_URL}/translate`,
     params: {
       from: inputLanguage,
       'to[0]': outputLanguage,
@@ -13,8 +15,8 @@ export const fetchTranslation = async (text, inputLanguage, outputLanguage) => {
     },
     headers: {
       'content-type': 'application/json',
-      'X-RapidAPI-Key': "0d4b0d9f0emsh4ffd214bfa4b80ep1ea384jsna97179322795",
-      'X-RapidAPI-Host': "microsoft-translator-text.p.rapidapi.com",
+      'X-RapidAPI-Key': API_KEY,
+      'X-RapidAPI-Host': API_HOST,
     },
     data: `[{"Text":"${text}"}]`,
   };
