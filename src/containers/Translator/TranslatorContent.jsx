@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles, createStyles } from "@mui/styles";
-import { Skeleton, Typography, Grid, TextField } from "@mui/material";
+import { Skeleton, Grid, TextField } from "@mui/material";
 
 import SwitchLanguages from "./SwitchLanguages";
 import AddToFavoriteButton from "./AddToFavoriteButton";
 import Container from "../../components/Container";
 import LanguageAutocomplete from "./LanguageAutocomplete";
 import getLanguages from "../../store/actions/languageActions/getLanguages";
-import detectLanguage from "../../store/actions/languageActions/detectLanguages";
 import translateText from "../../store/actions/translationActions/translateText";
 import addTranslationToHistory from "../../store/actions/historyActions/addTranslationToHistory";
 import getStringWithoutLineBreaks from "../../utils/getStringWithoutLinebreaks";
@@ -19,6 +18,7 @@ import {
   DEFAULT_OUTPUT_LANGUAGE,
   TRANSLATION_DELAY,
 } from "../../constants";
+import WrongLanguageMessage from "./WrongLanguageMessage";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -35,15 +35,12 @@ const TranslatorContent = () => {
   const [outputText, setOutputText] = useState("");
   const [inputLanguage, setInputLanguage] = useState(DETECT_LANGUAGE);
   const [outputLanguage, setOutputLanguage] = useState(DEFAULT_OUTPUT_LANGUAGE);
-  const [isLanguagesMatch, setIsLanguagesMatch] = useState(false);
 
   const dispatch = useDispatch();
   const languages = useSelector((state) => state.languages);
   const translation = useSelector((state) => state.translation);
-  const detectedLanguage = useSelector((state) => state.detectedLanguage);
 
   const translationText = translation?.data?.text[0]?.translations[0]?.text;
-  const detectedLanguageValue = detectedLanguage?.data?.language[0]?.language;
   const detectedLanguageFromTranslate =
     translation?.data?.text[0]?.detectedLanguage?.language;
 
@@ -78,16 +75,6 @@ const TranslatorContent = () => {
       translateText(textWithoutLineBreaks, fromLanguage, outputLanguage.value)
     );
   }, [debounsedTranslate, inputLanguage.label, outputLanguage.label]);
-
-  useEffect(() => {
-    if (inputLanguage.value !== DETECT_LANGUAGE.value) {
-      dispatch(detectLanguage(inputText));
-
-      if (detectedLanguageValue) {
-        setIsLanguagesMatch(inputLanguage.value !== detectedLanguageValue);
-      }
-    }
-  }, [outputText, detectedLanguageValue]);
 
   useEffect(() => {
     setOutputText(translationText);
@@ -138,12 +125,11 @@ const TranslatorContent = () => {
             </Grid>
 
             <Grid item>
-              {isLanguagesMatch && (
-                <Typography>
-                  Perhaps you need to change the keyboard layout or input
-                  language
-                </Typography>
-              )}
+              <WrongLanguageMessage
+                inputLanguage={inputLanguage}
+                inputText={inputText}
+                outputText={outputText}
+              />
             </Grid>
           </Grid>
         </Grid>
