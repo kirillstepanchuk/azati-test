@@ -8,6 +8,7 @@ import { nanoid } from "nanoid";
 
 import HistoryItem from "./HistoryItem";
 import Container from "../../components/Container";
+import { selectHistoryState } from "../../store/selectors";
 import clearTranslationHistory from "../../store/actions/historyActions/clearTranslationHistory";
 
 const useStyles = makeStyles((theme) =>
@@ -22,7 +23,7 @@ const HistoryList = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const { historyTranslations } = useSelector((state) => state.history);
+  const { historyTranslations } = useSelector(selectHistoryState);
 
   const onClearButtonClick = () => {
     dispatch(clearTranslationHistory());

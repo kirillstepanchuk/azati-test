@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 
 import FavoriteItem from "./FavoriteItem";
 import Container from "../../components/Container";
+import { selectFavoritesState } from "../../store/selectors";
 import removeTranslationFromFavorites from "../../store/actions/favoritesActions/removeTranslationFromFavorites";
 
 const useStyles = makeStyles((theme) =>
@@ -20,7 +21,7 @@ const FavoriteList = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const { favoritesTranslations } = useSelector((state) => state.favorites);
+  const { favoritesTranslations } = useSelector(selectFavoritesState);
 
   const onDeleteButtonClick = (translationData) => {
     return () => {

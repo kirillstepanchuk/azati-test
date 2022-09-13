@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
+import { selectDetectedLanguageState } from "../../store/selectors";
 import detectLanguage from "../../store/actions/languageActions/detectLanguages";
 import { DETECT_LANGUAGE } from "../../constants";
 
@@ -9,7 +10,7 @@ const WrongLanguageMessage = ({ inputLanguage, inputText, outputText }) => {
   const [isLanguagesMatch, setIsLanguagesMatch] = useState(false);
 
   const dispatch = useDispatch();
-  const detectedLanguage = useSelector((state) => state.detectedLanguage);
+  const detectedLanguage = useSelector(selectDetectedLanguageState);
 
   const detectedLanguageValue = detectedLanguage?.data?.language[0]?.language;
 

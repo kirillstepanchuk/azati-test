@@ -8,6 +8,10 @@ import AddToFavoriteButton from "./AddToFavoriteButton";
 import WrongLanguageMessage from "./WrongLanguageMessage";
 import LanguageAutocomplete from "./LanguageAutocomplete";
 import Container from "../../components/Container";
+import {
+  selectLanguagesState,
+  selectTranslationState,
+} from "../../store/selectors";
 import getLanguages from "../../store/actions/languageActions/getLanguages";
 import translateText from "../../store/actions/translationActions/translateText";
 import addTranslationToHistory from "../../store/actions/historyActions/addTranslationToHistory";
@@ -37,8 +41,8 @@ const TranslatorContent = () => {
   const [outputLanguage, setOutputLanguage] = useState(DEFAULT_OUTPUT_LANGUAGE);
 
   const dispatch = useDispatch();
-  const languages = useSelector((state) => state.languages);
-  const translation = useSelector((state) => state.translation);
+  const languages = useSelector(selectLanguagesState);
+  const translation = useSelector(selectTranslationState);
 
   const translationText = translation?.data?.text[0]?.translations[0]?.text;
   const detectedLanguageFromTranslate =
